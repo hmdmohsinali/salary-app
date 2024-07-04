@@ -231,7 +231,7 @@ export function Sidebar() {
                   <span className="ml-3">Add Slips</span>
                 </Link>
               </li>
-              <li className="my-2">
+              {/* <li className="my-2">
                 <Link
                   className={classNames(
                     location.pathname === "/salary-app/userchat"
@@ -248,7 +248,7 @@ export function Sidebar() {
                   />
                   <span className="ml-3">Users Chat Monitoring</span>
                 </Link>
-              </li>
+              </li> */}
 
               {menuItems &&
                 menuItems.map((item, index) => (
