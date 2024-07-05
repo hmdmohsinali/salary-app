@@ -5,7 +5,7 @@ import dashboard from "../assests/dashboard.png";
 import { useDispatch } from "react-redux";
 
 import { addAmin } from "../../StoreRedux/currentAdminSlice";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export function Sidebar() {
   const location = useLocation();

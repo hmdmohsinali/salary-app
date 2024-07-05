@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import  toast  from 'react-hot-toast';
 import { useDispatch } from "react-redux";
 import CryptoJS from 'crypto-js';
 import { addAmin } from '../../StoreRedux/currentAdminSlice';

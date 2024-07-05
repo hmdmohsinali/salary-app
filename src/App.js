@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { RoutingcallAuth } from "./components/Auth/RoutingcallAuth";
 import { RoutingCallAdmin } from "./components/Admin/RoutingCallAdmin";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+
 import CryptoJS from 'crypto-js';
 import { secretEnKey } from "./config";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAdmin, addAmin } from "./StoreRedux/currentAdminSlice";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -57,8 +57,7 @@ function App() {
           <Route path="/*" element={<RoutingcallAuth />} />
           {storeAdmin && <Route path="/salary-app/*" element={<RoutingCallAdmin />} />}
         </Routes>
-        <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={true} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover stacked />
-
+        <Toaster/>
       </div>
     </Router>
   );

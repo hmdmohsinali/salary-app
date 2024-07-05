@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Loader } from "../../Loader/loader";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 import { AddNewadmin } from "../../../StoreRedux/adminSlice";
 import { addAdmin } from "../../adminService";
+import toast from "react-hot-toast";
 
 
 export function Addadmin() {

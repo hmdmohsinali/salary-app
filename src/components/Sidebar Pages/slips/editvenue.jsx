@@ -3,10 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Loader } from "../../Loader/loader";
 import { useDispatch, useSelector, } from "react-redux";
-import { toast } from "react-toastify";
 // import { serverUrl } from "../../../config";
 import { useNavigate, useParams } from "react-router-dom";
 import { selectvenues, updatevenues } from "../../../StoreRedux/venuesSlice";
+import toast from "react-hot-toast";
 
 
 export function Editvenue() {

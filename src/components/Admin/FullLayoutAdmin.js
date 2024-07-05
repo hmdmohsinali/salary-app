@@ -44,7 +44,7 @@ export const AdminLayout = () => {
     if (!storeusers || storeusers.length === 0) {
       getUsers()
     }
-  }, [])
+  }, [storeusers,dispatch])
 
   useEffect(() => {
     const getVenues = async () => {

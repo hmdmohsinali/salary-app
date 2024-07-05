@@ -1,9 +1,20 @@
 import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, collection, addDoc } from 'firebase/firestore';
-import {toast} from 'react-toastify';
+import { doc, setDoc, getDocs, collection, query, where } from 'firebase/firestore';
+import toast from 'react-hot-toast';
+
 const createEmployee = async (email, password, employeeName) => {
   try {
+    // Check if the employee name already exists
+    const q = query(collection(db, 'employees'), where('employeeName', '==', employeeName));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      toast.error("Employee name already exists");
+      return;
+    }
+
+    // Create a new user with email and password
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
@@ -11,17 +22,18 @@ const createEmployee = async (email, password, employeeName) => {
     await setDoc(doc(db, 'employees', user.uid), {
       email: user.email,
       employeeName,
-      employeeId: user.uid // Ensure correct field name
+      employeeId: user.uid
     });
 
-    // Create an empty 'slips' sub-collection for the new employee by adding a placeholder document
-    const slipCollectionRef = collection(db, `employees/${user.uid}/slips`);
-    await addDoc(slipCollectionRef, { placeholder: true }); // Add a placeholder document
-    toast.success("Employee Created Successfully")
+    toast.success("Employee Created Successfully");
     console.log('User created successfully and slips collection created:', user);
   } catch (error) {
-    toast.error("User already exist")
-    console.error( error.message);
+    if (error.code === 'auth/email-already-in-use') {
+      toast.error("Email already in use");
+    } else {
+      toast.error("Error creating user: " + error.message);
+    }
+    console.error(error.message);
   }
 };
 

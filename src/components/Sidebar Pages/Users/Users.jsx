@@ -1,109 +1,97 @@
-import React from 'react';
-import { Card, Typography, Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react';
+import { db } from '../../../firebase'; // Adjust the import based on your firebase configuration file
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { MdDeleteForever } from 'react-icons/md'; // Ensure you have react-icons installed
+import { Loader } from '../../Loader/loader';
 
-const Root = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(2),
-}));
+const Users = () => {
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  
 
-const StyledCard = styled(Card)(({ theme }) => ({
-  margin: theme.spacing(2),
-}));
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'employees'));
+        const employeesList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setEmployees(employeesList);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching employees: ', error);
+        setLoading(false);
+      }
+    };
+    
+    fetchEmployees();
+  }, []);
 
-const users = [
-  {
-    id: 1,
-    name: 'Lee from Tennessee',
-    email: 'lee@example.com',
-    phone: '123-456-7890',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 2,
-    name: 'Jane from New York',
-    email: 'jane@example.com',
-    phone: '234-567-8901',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 3,
-    name: 'John from California',
-    email: 'john@example.com',
-    phone: '345-678-9012',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 4,
-    name: 'Sara from Texas',
-    email: 'sara@example.com',
-    phone: '456-789-0123',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 5,
-    name: 'Mike from Florida',
-    email: 'mike@example.com',
-    phone: '567-890-1234',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 6,
-    name: 'Anna from Nevada',
-    email: 'anna@example.com',
-    phone: '678-901-2345',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 7,
-    name: 'Chris from Ohio',
-    email: 'chris@example.com',
-    phone: '789-012-3456',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 8,
-    name: 'Laura from Colorado',
-    email: 'laura@example.com',
-    phone: '890-123-4567',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 9,
-    name: 'Robert from Illinois',
-    email: 'robert@example.com',
-    phone: '901-234-5678',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 10,
-    name: 'Emily from Arizona',
-    email: 'emily@example.com',
-    phone: '012-345-6789',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 11,
-    name: 'David from Washington',
-    email: 'david@example.com',
-    phone: '123-456-7890',
-    dp: '/path/to/image.png',
-  },
-  {
-    id: 12,
-    name: 'Sophia from Oregon',
-    email: 'sophia@example.com',
-    phone: '234-567-8901',
-    dp: '/path/to/image.png',
-  },
-];
+  const handleDeleteClick = (id) => {
+    setSelectedEmployeeId(id);
+    setShowPopup(true);
+  };
 
-const UserList = () => {
+  const handleDeleteConfirm = async () => {
+    try {
+      await deleteDoc(doc(db, 'employees', selectedEmployeeId));
+      setEmployees(employees.filter(employee => employee.id !== selectedEmployeeId));
+      setShowPopup(false);
+      setSelectedEmployeeId(null);
+    } catch (error) {
+      console.error('Error deleting employee: ', error);
+    }
+  };
+
+  
+
   return (
-    <>
-    <h1>Hello</h1>
-    </>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Employees List</h1>
+      <ul className="space-y-4">
+        {employees.map(employee => (
+          <li key={employee.id} className="flex justify-between items-center p-4 bg-white shadow rounded">
+            <div>
+              <p className="font-medium">{employee.employeeName}</p>
+              <p className="text-sm text-gray-600">{employee.email}</p>
+            </div>
+            <MdDeleteForever
+              onClick={() => handleDeleteClick(employee.id)}
+              className="h-7 w-6 text-red-500 hover:cursor-pointer"
+            />
+          </li>
+        ))}
+      </ul>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p className="mb-4">Are you sure you want to delete this user?</p>
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 text-gray-700 py-2 px-4 rounded mr-2"
+                onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-500 text-white py-2 px-4 rounded"
+                onClick={handleDeleteConfirm}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Loader loading={loading}/>
+    </div>
   );
 };
 
-export default UserList;
+export default Users;

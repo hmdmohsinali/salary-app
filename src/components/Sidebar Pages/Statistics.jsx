@@ -1,14 +1,51 @@
-import { useSelector } from "react-redux";
-import { selectUsers } from "../../StoreRedux/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Adduser, selectUsers } from "../../StoreRedux/UserSlice";
 import { Link } from "react-router-dom";
 import { selectvenues } from "../../StoreRedux/venueSlice";
+import {
+  collection,
+  query,
+  orderBy,
+  getDocs,
+} from "firebase/firestore";
+import { useEffect } from "react";
+import { db } from "../../firebase";
+
+
 
 
 
 const Statistics = () => {
   const storeAllUsers = useSelector(selectUsers);
   const storeavnue = useSelector(selectvenues)
-  console.log(storeAllUsers)
+  const dispatch = useDispatch();
+  const storeusers = useSelector(selectUsers);
+
+
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+
+        const usersSnapshot = await getDocs(collection(db, 'employees'));
+        // Iterate through each user
+        const usersData = usersSnapshot.docs.map((userdoc) => {
+          return {
+            docId: userdoc.id,
+            ...userdoc.data()
+          }
+        });
+        console.log(usersData)
+        dispatch(Adduser(usersData))
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+    if (!storeusers || storeusers.length === 0) {
+      getUsers()
+    }
+  })
 
   return (
     <div>
@@ -21,7 +58,7 @@ const Statistics = () => {
 
       <div className="w-full my-2  grid grid-cols-2 gap-3 px-6 ">
         {storeAllUsers &&
-          <Link to={"/Admin/users"} className="flex col-span-2 items-center  px-5  py-6 shadow-lg rounded-md bg-slate-300">
+          <Link to={"/salary-app/usermanagment"} className="flex col-span-2 items-center  px-5  py-6 shadow-lg rounded-md bg-slate-300">
 
             <div className="p-3 rounded-full bg-indigo-600 bg-opacity-75">
               <svg

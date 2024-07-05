@@ -5,13 +5,13 @@ import { AdminLayout } from "./FullLayoutAdmin";
 import Statistics from "../Sidebar Pages/Statistics";
 import Users from "../Sidebar Pages/Users/Users";
 import { PrivateRouteAdmin } from "./PrivateRouteAdmin";
-import AdminUserChat from "../Sidebar Pages/adminUserChat/AdminUserChat";
-import VenueDetail from "../Sidebar Pages/adminUserChat/venueDetail";
+// import VenueDetail from "../Sidebar Pages/adm/venueDetail";
 import { Addadmin } from "../Sidebar Pages/admins/AddAdmin";
 import { AdminDetails } from "../Sidebar Pages/admins/adminDetails";
 import { Admins } from "../Sidebar Pages/admins/admins";
 import UserChat from "../Sidebar Pages/userChat/UserChat";
 import Employee from '../employees/Employee'
+import AddSlips from "../Sidebar Pages/slips/AddSlips";
 
 export const ThemeRoutes = [
   {
@@ -25,10 +25,10 @@ export const ThemeRoutes = [
       { path: 'usermanagment', exact: true, element: <PrivateRouteAdmin element={<Users />} /> },
       { path: 'meetupmanage', exact: true, element: <PrivateRouteAdmin element={<Employee/>} /> },
       
-      { path: 'adminuserchat', exact: true, element: <PrivateRouteAdmin element={<AdminUserChat/>} /> },
+      { path: 'adminuserchat', exact: true, element: <PrivateRouteAdmin element={<AddSlips/>} /> },
       { path: 'userchat', exact: true, element: <PrivateRouteAdmin element={<UserChat/>} /> },
       // { path: 'usermanagment', exact: true, element: <PrivateRouteAdmin element={<Addvenues />} /> },
-      { path: 'VenueDetail/:docId', exact: true, element: <PrivateRouteAdmin element={<VenueDetail />} /> },
+      // { path: 'VenueDetail/:docId', exact: true, element: <PrivateRouteAdmin element={<VenueDetail />} /> },
 
       { path: 'Addadmins', exact: true, element: <PrivateRouteAdmin element={<Addadmin />} /> },
       { path: 'AdminDetails/:id', exact: true, element: <PrivateRouteAdmin element={<AdminDetails />} /> },

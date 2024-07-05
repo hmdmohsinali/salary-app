@@ -2,9 +2,10 @@ import React from "react";
 import { deleteDoc, doc, } from 'firebase/firestore';
 import { db } from "../firebase";
 import { useDispatch, } from "react-redux";
-import { toast } from "react-toastify";
+
 import { deletevenue } from "../StoreRedux/venueSlice";
 import { deleteadmin } from "../StoreRedux/adminSlice";
+import toast from "react-hot-toast";
 
 const DeleteModal = (props) => {
   console.log("aya")
