@@ -1,12 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
-import { Adduser, selectUsers } from "../../StoreRedux/UserSlice";
 import { Link } from "react-router-dom";
-import { selectvenues } from "../../StoreRedux/venueSlice";
 import {
   collection,
-  query,
-  orderBy,
-  getDocs,
   onSnapshot,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -17,7 +11,6 @@ import { db } from "../../firebase";
 
 
 const Statistics = () => {
-  const storeAllUsers = useSelector(selectUsers);
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
