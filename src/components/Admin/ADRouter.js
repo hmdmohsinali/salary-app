@@ -23,9 +23,9 @@ export const ThemeRoutes = [
       { path: "starter", exact: true, element: <PrivateRouteAdmin element={<Statistics />} /> },
       { path: "userdetails/:id", exact: true, element: <PrivateRouteAdmin element={<UserDetails />} /> },
       { path: 'usermanagment', exact: true, element: <PrivateRouteAdmin element={<Users />} /> },
-      { path: 'meetupmanage', exact: true, element: <PrivateRouteAdmin element={<Employee/>} /> },
+      { path: 'addemployee', exact: true, element: <PrivateRouteAdmin element={<Employee/>} /> },
       
-      { path: 'adminuserchat', exact: true, element: <PrivateRouteAdmin element={<AddSlips/>} /> },
+      { path: 'addslip', exact: true, element: <PrivateRouteAdmin element={<AddSlips/>} /> },
       { path: 'userchat', exact: true, element: <PrivateRouteAdmin element={<UserChat/>} /> },
       // { path: 'usermanagment', exact: true, element: <PrivateRouteAdmin element={<Addvenues />} /> },
       // { path: 'VenueDetail/:docId', exact: true, element: <PrivateRouteAdmin element={<VenueDetail />} /> },

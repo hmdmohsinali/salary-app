@@ -180,12 +180,12 @@ export function Sidebar() {
               <li className="my-2">
                 <Link
                   className={classNames(
-                    location.pathname === "/salary-app/meetupmanage"
+                    location.pathname === "/salary-app/addemployee"
                       ? "text-black bg-gray-200"
                       : "text-white",
                     " flex items-center p-2 text-base font-medium  rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-200 hover:text-black group "
                   )}
-                  to="/salary-app/meetupmanage"
+                  to="/salary-app/addemployee"
                 >
                   <img
                     src={"/v4.png"}
@@ -216,12 +216,12 @@ export function Sidebar() {
               <li className="my-2">
                 <Link
                   className={classNames(
-                    location.pathname === "/salary-app/adminuserchat"
+                    location.pathname === "/salary-app/addslip"
                       ? "text-black bg-gray-200"
                       : "text-white",
                     " flex items-center p-2 text-base font-medium  rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-200 hover:text-black group "
                   )}
-                  to="/salary-app/adminuserchat"
+                  to="/salary-app/addslip"
                 >
                   <img
                     src={"/v2.png"}
