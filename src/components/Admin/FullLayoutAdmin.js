@@ -31,7 +31,7 @@ export const AdminLayout = () => {
     if (!storeadmins || storeadmins.length === 0) {
       getAdminss();
     }
-  }, []);
+  }, [storeadmins,dispatch]);
 
 
   return (
