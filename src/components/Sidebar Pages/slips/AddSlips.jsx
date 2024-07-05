@@ -89,7 +89,10 @@ const AddSlips = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.emplName) return;
+    if (!formData.emplName) {
+      toast.error("Select an employee")
+      return
+    };
 
     try {
       const q = query(collection(db, 'employees'), where('employeeName', '==', formData.emplName));
