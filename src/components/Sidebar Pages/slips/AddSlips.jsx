@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../firebase'; // Import your Firebase Firestore configuration
-import { collection, getDocs,addDoc } from 'firebase/firestore';
+import { collection, getDocs,addDoc , where, query } from 'firebase/firestore';
 import toast, { LoaderIcon } from 'react-hot-toast';
+import { Loader } from '../../Loader/loader';
 
 const AddSlips = () => {
   const [formData, setFormData] = useState({
@@ -35,9 +36,11 @@ const AddSlips = () => {
 
   useEffect(() => {
     const fetchEmployees = async () => {
+      setLoading(true)
       const querySnapshot = await getDocs(collection(db, 'employees'));
       const employeesList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setEmployees(employeesList);
+      setLoading(false)
     };
 
     fetchEmployees();
@@ -79,12 +82,27 @@ const AddSlips = () => {
     });
   };
 
+
+
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.emplName) return;
 
     try {
-      const salaryCollectionRef = collection(db, `employees/${formData.emplName}/slips`);
+      const q = query(collection(db, 'employees'), where('employeeName', '==', formData.emplName));
+      setLoading(true)
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        toast.error("Employee not found");
+        return;
+      }
+
+      const employeeDoc = querySnapshot.docs[0]; // Assuming employee names are unique
+      const salaryCollectionRef = collection(db, `employees/${employeeDoc.id}/slips`);
+
       await addDoc(salaryCollectionRef, {
         hrsWorked: formData.hrsWorked,
         hryRate: formData.hryRate,
@@ -109,6 +127,7 @@ const AddSlips = () => {
         netPay: formData.netPay,
         note: formData.note
       });
+      setLoading(false)
       toast.success("Slip Added Succeesfully")
       setFormData({
         emplName: '',
@@ -404,7 +423,7 @@ const AddSlips = () => {
       </div>
       
     </form>
-    
+    <Loader loading={loading}/>
     </div>
   );
 };
