@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../firebase'; // Import your Firebase Firestore configuration
-import { collection, getDocs,addDoc , where, query } from 'firebase/firestore';
-import toast, { LoaderIcon } from 'react-hot-toast';
+import { collection, getDocs, addDoc, where, query } from 'firebase/firestore';
+import toast from 'react-hot-toast';
 import { Loader } from '../../Loader/loader';
+import Select from 'react-select';
 
 const AddSlips = () => {
   const [formData, setFormData] = useState({
@@ -32,15 +33,15 @@ const AddSlips = () => {
   });
 
   const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchEmployees = async () => {
-      setLoading(true)
+      setLoading(true);
       const querySnapshot = await getDocs(collection(db, 'employees'));
       const employeesList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setEmployees(employeesList);
-      setLoading(false)
+      setLoading(false);
     };
 
     fetchEmployees();
@@ -82,21 +83,25 @@ const AddSlips = () => {
     });
   };
 
-
-
-
-
+  const handleSelectChange = (selectedOption) => {
+    handleChange({
+      target: {
+        name: 'emplName',
+        value: selectedOption ? selectedOption.value : ''
+      }
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.emplName) {
-      toast.error("Select an employee")
-      return
-    };
+      toast.error("Select an employee");
+      return;
+    }
 
     try {
       const q = query(collection(db, 'employees'), where('employeeName', '==', formData.emplName));
-      setLoading(true)
+      setLoading(true);
       const querySnapshot = await getDocs(q);
       if (querySnapshot.empty) {
         toast.error("Employee not found");
@@ -130,8 +135,8 @@ const AddSlips = () => {
         netPay: formData.netPay,
         note: formData.note
       });
-      setLoading(false)
-      toast.success("Slip Added Succeesfully")
+      setLoading(false);
+      toast.success("Slip Added Successfully");
       setFormData({
         emplName: '',
         hrsWorked: 0,
@@ -158,29 +163,33 @@ const AddSlips = () => {
         note: ''
       });
     } catch (error) {
-      toast.error("Error saving slip")
+      toast.error("Error saving slip");
       console.error('Error adding salary slip:', error.message);
     }
   };
 
+  // Transform employees data into the format react-select expects
+  const employeeOptions = employees.map(emp => ({
+    value: emp.employeeName,
+    label: emp.employeeName
+  }));
+
   return (
     <div>
-    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded-lg space-y-4">
-      <div className='flex items-center space-x-4'>
-        <div className='flex-1'>
-          <label className="block font-semibold">EMPL NAME</label>
-          <select
-            name="emplName"
-            value={formData.emplName}
-            onChange={handleChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Select Employee</option>
-            {employees.map(emp => (
-              <option key={emp.id} value={emp.employeeName}>{emp.employeeName}</option>
-            ))}
-          </select>
-        </div>
+      <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded-lg space-y-4">
+        <div className='flex items-center space-x-4'>
+          <div className='flex-1'>
+            <label className="block font-semibold">EMPL NAME</label>
+            <Select
+              name="emplName"
+              value={employeeOptions.find(option => option.value === formData.emplName)}
+              onChange={handleSelectChange}
+              options={employeeOptions}
+              className="w-full p-2 border rounded "
+              classNamePrefix="select"
+              placeholder="Select Employee"
+            />
+          </div>
         <div className='flex-1'>
           <label className="block font-semibold">Hrs. Worked</label>
           <input
