@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../firebase'; // Import your Firebase Firestore configuration
-import { collection, getDocs, addDoc, where, query } from 'firebase/firestore';
+import { collection, getDocs, addDoc, where, query,Timestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { Loader } from '../../Loader/loader';
 import Select from 'react-select';
@@ -112,6 +112,8 @@ const AddSlips = () => {
       const salaryCollectionRef = collection(db, `employees/${employeeDoc.id}/slips`);
 
       await addDoc(salaryCollectionRef, {
+        createdAt: Timestamp.now(),
+        emplID:employeeDoc.id,
         hrsWorked: formData.hrsWorked,
         hryRate: formData.hryRate,
         wage: formData.wage,

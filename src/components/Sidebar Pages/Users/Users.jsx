@@ -3,6 +3,7 @@ import { db } from '../../../firebase'; // Adjust the import based on your fireb
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { MdDeleteForever } from 'react-icons/md'; // Ensure you have react-icons installed
 import { Loader } from '../../Loader/loader';
+import toast from 'react-hot-toast';
 
 const Users = () => {
   const [employees, setEmployees] = useState([]);
@@ -37,10 +38,15 @@ const Users = () => {
 
   const handleDeleteConfirm = async () => {
     try {
+      setLoading(true)
       await deleteDoc(doc(db, 'employees', selectedEmployeeId));
       setEmployees(employees.filter(employee => employee.id !== selectedEmployeeId));
+
+      setLoading(false)
       setShowPopup(false);
+
       setSelectedEmployeeId(null);
+      toast.success("Emplyee Deleted")
     } catch (error) {
       console.error('Error deleting employee: ', error);
     }
